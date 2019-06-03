@@ -1,0 +1,22 @@
+{
+  "name": "nodejs_mysql",
+  "version": "1.0.0",
+  "description": "github data crawling using nodejs_mysql",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "clone": "^2.1.2",
+    "express": "^4.16.4",
+    "fs": "0.0.1-security",
+    "jade": "^1.11.0",
+    "node-mysql": "^0.4.2",
+    "path": "^0.12.7",
+    "plotly": "^1.0.6",
+    "python-shell": "^1.0.7"
+  }
+}

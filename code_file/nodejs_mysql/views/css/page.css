@@ -1,0 +1,35 @@
+body {
+	background-color: #F3E2A9
+}
+
+article {
+	background-color: white;
+	width: 1000px;
+	margin: 0 auto;
+	height: 500px;
+	position: relative;
+	top: 180px;
+}
+
+h1 {
+	text-align: center;
+	font-size: 48px;
+	position: relative;
+	top: 150px;
+}
+
+form {
+	width: 500px;
+	margin: 0 auto;
+	position: relative;
+	top: 200px;
+}
+
+#github_name {
+	width: 400px;
+	height: 32px;
+}
+
+#send {
+	height: 32px;
+}

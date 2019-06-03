@@ -1,0 +1,12 @@
+doctype html
+html
+	head
+		meta(charset='utf-8')
+		link(rel="stylesheet", href="/views/css/page.css")
+		title Github Resume
+	body
+		article
+			h1 Github Data Crawling and Analyzer
+			form(action='/page' method='post')
+				input(id="github_name", type="text", name='name', placeholder='Github UserName') 
+				input(id="send", type='submit', value='send')
