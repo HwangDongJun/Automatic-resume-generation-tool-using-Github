@@ -35,4 +35,4 @@ Github Data를 활용한 이력서 자동 제작 도구
 		- User가 활동한 Event의 횟수를 Table로 표시
 
 4. 결과화면
-	![User_Resume1]('./img/user_resum1.PNG')
+	![User_Resume1]('./img/user_resume1.PNG')
