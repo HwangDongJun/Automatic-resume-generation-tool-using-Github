@@ -31,20 +31,20 @@ Github Data를 활용한 이력서 자동 제작 도구
 	- User Information
 	- Repository
 		- 선정 기준 7가지를 토대로 Repository 4개 선정
-			[1] master를 제외한 branch를 사용한 것을 최고 우선순위로 정한다.
-				[1.1] 4개를 넘었을 경우 : 종합 점수를 내어 4개를 정한다.
-				[1.2] 4개를 넘지 못했을 경우 : Branch를 사용하지 않은 repository 중 높은 점수로 나머지를 채운다.
-			[2] Collaborator들의 여부에 따라 점수로 변경한다. (혼자 진행할 경우 우선순위에서 제외시킬려고 했지만 학생들의 경우 Repository가 없을 수도 있기에 점수로 변경)
-				[2.1] Collaborator의 수에 따라 1점씩 준다.
-			[3] License 여부에 따라 점수로 변경한다. (License 사용 또한 github사용의 큰 의미를 둔다고 생각)
-				[3.1] License가 있다면 1점, 없다면 0점을 준다.
-			[4] 개인 commit / 전체 commit 을 계산하여 점수로 변경한다.
-			[5] 개인 issue / 전체 issue 를 계산하여 점수로 변경한다.
-			[6] 자신이 올린 issue를 제외한 issue에 comment를 단 횟수에 따라 점수로 변경한다.
-			[7] pullRequest를 확인한다.
-				[7.1] 직접 올린 pullRequest라면 MERGED > OPEN > CLOSED 순으로 점수를 준다. (MERGED : 8, OPEN : 4, CLOSED : 2)
-				[7.2] 직접 올리지 않았다면 participants에 사용자가 포함되었는지 확인한다. (포함되었다면 5점을 부여한다.)
-				[7.3] pullRequest마다 실행한 commit_count를 점수에 추가한다.
+			- [1] master를 제외한 branch를 사용한 것을 최고 우선순위로 정한다.
+				- [1.1] 4개를 넘었을 경우 : 종합 점수를 내어 4개를 정한다.
+				- [1.2] 4개를 넘지 못했을 경우 : Branch를 사용하지 않은 repository 중 높은 점수로 나머지를 채운다.
+			- [2] Collaborator들의 여부에 따라 점수로 변경한다. (혼자 진행할 경우 우선순위에서 제외시킬려고 했지만 학생들의 경우 Repository가 없을 수도 있기에 점수로 변경)
+				- [2.1] Collaborator의 수에 따라 1점씩 준다.
+			- [3] License 여부에 따라 점수로 변경한다. (License 사용 또한 github사용의 큰 의미를 둔다고 생각)
+				- [3.1] License가 있다면 1점, 없다면 0점을 준다.
+			- [4] 개인 commit / 전체 commit 을 계산하여 점수로 변경한다.
+			- [5] 개인 issue / 전체 issue 를 계산하여 점수로 변경한다.
+			- [6] 자신이 올린 issue를 제외한 issue에 comment를 단 횟수에 따라 점수로 변경한다.
+			- [7] pullRequest를 확인한다.
+				- [7.1] 직접 올린 pullRequest라면 MERGED > OPEN > CLOSED 순으로 점수를 준다. (MERGED : 8, OPEN : 4, CLOSED : 2)
+				- [7.2] 직접 올리지 않았다면 participants에 사용자가 포함되었는지 확인한다. (포함되었다면 5점을 부여한다.)
+				- [7.3] pullRequest마다 실행한 commit_count를 점수에 추가한다.
 		- 각 Repository의 Watch, Star, Fork count 표시
 		- 각 Repository의 Code line 표시
 	- Language
