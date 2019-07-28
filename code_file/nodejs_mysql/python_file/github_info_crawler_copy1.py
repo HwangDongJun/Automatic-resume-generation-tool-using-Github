@@ -35,7 +35,7 @@ class get_info(object):
 
 		# q.put([avatarUrl, bio, location, name, github_url, websiteUrl])
 		return [avatarUrl, bio, location, github_url, websiteUrl, company]
-	
+
 	def commits_crawler(self, commits_json, committed_data, repo):
 		commits_data = commits_json['data']['repository']['defaultBranchRef']['target']['history']['edges']
 		until_date = commits_data[len(commits_data)-1]['node']['committedDate'] #commits_data의 경우 정해진 개수가 표시되기에 date를 저장하여 지속적으로 탐색
@@ -45,16 +45,16 @@ class get_info(object):
 					committed_data[data['node']['committedDate'][:10]] = [data['node']['additions'], data['node']['deletions']]
 			next_commit_crawler = graphql_api_crawler_commit(repo, self.header, self.user_name, until_date)
 			commit_data = next_commit_crawler.run_query()
-	
+
 	# def repo_info_crawling(self, q):
 	def repo_info_crawling(self):
 		repo_info = repo_diff_info(self.header, self.user_name)
 		repo_names = repo_info.get_repo_info()
-		
+
 		t3 = threading.Thread(target=repo_info.get_event, args=(self.userEvents,))
 		t3.start()
 		t3.join()
-			
+
 		now_date = datetime.now()
 		now_date = (now_date.isoformat()[:19] + 'Z')
 
@@ -67,7 +67,7 @@ class get_info(object):
 		for i, repo in enumerate(repo_names):
 			repo_crawler = graphql_api_crawler(repo, self.header, self.user_name)
 			repo_data = repo_crawler.run_query()
-			
+
 			commit_crawler = graphql_api_crawler_commit(repo, self.header, self.user_name, now_date)
 			commit_data = commit_crawler.run_query()
 
@@ -102,18 +102,18 @@ class get_info(object):
 			t6.join()
 			t7.join()
 			t8.join()
-			
+
 			#Choose the case with the highest number of commit attempts.
 			if repo_data['data']['repository']['defaultBranchRef'] == None:
 				continue
-			
+
 			total_repo_info.append([i, repo_data['data']['repository']['url'], repo_data['data']['repository']['stargazers']['totalCount'], repo_data['data']['repository']['watchers']['totalCount'], repo_data['data']['repository']['forkCount'], repo_data['data']['repository']['createdAt'][:10]])
 			commit_ranking[i] = repo_data['data']['repository']['defaultBranchRef']['target']['history']['totalCount']
-			
+
 			repo_names_dict[i] = repo
 			#etc_info[repo] = total_count
 			#etc_info -> {repo_name : [total_count, url]}
-		
+
 		print(committed_data)
 		print(self.repoBranches)
 		print(self.repoCheckIssue)

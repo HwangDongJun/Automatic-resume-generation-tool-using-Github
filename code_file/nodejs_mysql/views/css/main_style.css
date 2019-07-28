@@ -8,18 +8,31 @@ hr {
 
 #repohr {
 	position: relative;
-	left: 180px;
-	bottom: 8px;
+	bottom: 10px;
 }
 
 .category {
 	font-size: 24px;
 }
 
+#github_logo {
+	position: relative;
+	right: 60px;
+}
+
+#url_logo {
+	position: relative;
+	bottom: 56px;
+}
+
 #repo {
 	position: relative;
 	left: 30px;
 	bottom: -10px;
+}
+
+#lang_repo {
+	text-align: right;
 }
 
 .watch {
@@ -35,6 +48,13 @@ hr {
 	position: relative;
 	right: 26px;
 	top: 1px;
+}
+.code_line {
+	position: relative;
+	right: 5px;
+	top: 2px;
+	height: 20px;
+	width: 24px;
 }
 
 .watch_count {
@@ -52,7 +72,14 @@ hr {
 	right: 22px;
 	bottom: 3px;
 }
+.code_line_count {
+	position: relative;
+	bottom: 2px;
+}
 
+a {
+	font-size: 14px;
+}
 a:link {
 	color: #DA81F5;
 	text-decoration: none;
@@ -71,33 +98,42 @@ a:hover {
 	bottom: 13px;
 }
 
-.percount {
+.box {
 	position: relative;
-	top: 100px;
-	z-index: 3;
+	bottom: 330px;
+	left: 40px;
+}
+
+#select_box {
+	position: relative;
+	right: 970px;
+	top: 194px;
+}
+#select_box_submit {
+	position: relative;
+	right: 950px;
+	top: 194px;
 }
 
 #topic {
 	position: relative;
-	right: 1140px;
-	top: 190px;
+	right: 820px;
+	top: 186px;
+	background-color: white;
 }
 
 #event {
 	position: relative;
-	top: 190px;
-	right: 360px;
+	left: 980px;
+	bottom: 122px;
 	background-color: white;
-	width: 130px;
-	display: inline-block;
-	text-align: left;
-	padding-left: 30px;
 }
 
 #profile_page {
 	box-shadow: 5px 5px 5px;
 	background-color: white;
 	width: 90%;
+	height: 1100px;
 	position: relative;
 	margin: auto;
 }
@@ -131,7 +167,8 @@ a:hover {
 	vertical-align: middle;
 	position: relative;
 	right: 74px;
-	top: 20px;
+	top: 10px;
+	height: 110px;
 }
 
 .repo_list {
@@ -151,9 +188,9 @@ a:hover {
 	width: 100%;
 }
 
-.createAt {
-	color: #BDBDBD;
-	font-size: 6px;
+.At_time {
+	color: #848484;
+	font-size: 10px;
 }
 
 li {
@@ -161,14 +198,27 @@ li {
 	margin: 10px 50px;
 }
 
-/*
-#myRadarChart {
+#hide_block {
+	background-color: white;
+	height: 30px;
+	width: 80px;
+	z-index: 10;
 	position: absolute;
-
-	left: 640px;
-	bottom: 0px;
+	bottom: 30px;
+	left: 70px;
 }
-*/
+
+#chartContainer {
+	position: relative;
+	right: 1140px;
+	top: 190px;
+}
+
+#myRadarChart {
+	position: relative;
+	left: 710px;
+	bottom: 100px;
+}
 
 #myBarChart {
 	position: relative;
@@ -177,8 +227,8 @@ li {
 
 table {
 	position: absolute;
-	left: 920px;
-	bottom:90px;
+	left: 760px;
+	bottom: 140px;
 	border-collapse: collapse;
 	text-align: center;
 }

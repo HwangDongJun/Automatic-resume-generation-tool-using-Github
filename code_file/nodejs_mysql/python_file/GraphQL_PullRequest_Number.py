@@ -1,46 +1,30 @@
 import requests
-from datetime import datetime
 
 REPO_PATH = 'https://api.github.com/graphql'
-now = datetime.now()
-now = (now.isoformat()[:19] + 'Z')
 
-class graphql_api_crawler(object):
-	def __init__(self, repo_name, headers, user_name):
+class graphql_api_crawler_pr_number(object):
+	def __init__(self, repo_name, headers, user_name, number):
 		self.repo_name = repo_name
 		self.headers = headers
 		self.user_name = user_name
 		self.query = '''
 		{
 			repository (owner: "''' + self.user_name + '''", name: "''' + self.repo_name + '''") {
-				primaryLanguage {
-					name
-				}
-				description
-				updatedAt
-				createdAt
-				stargazers (last: 1) {
-					totalCount
-				}
-				watchers (last: 1) {
-					totalCount
-				}
-				forkCount
-				... on Repository {
-					url
-					owner {
+                pullRequest (number: ''' + number + ''') {
+					author {
 						login
 					}
-				}
-				defaultBranchRef {
-					target {
-						... on Commit {
-							history (until: "''' + now + '''") {
-								totalCount
-							}
-						}
+					commits {
+						totalCount
 					}
-				}
+                    participants (last: 100) {
+                        edges {
+                            node {
+                                login
+                            }
+                        }
+                    }
+                }
 			}
 		}
 		'''

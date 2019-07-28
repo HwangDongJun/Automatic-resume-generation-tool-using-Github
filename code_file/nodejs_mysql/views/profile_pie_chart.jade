@@ -14,10 +14,6 @@ html
 			p(id="user_area")
 				img(id="user_img", src=privacy.user_info[0], alt="Github_user_img" height="180", width="180")
 				div(class="user")
-					b Name :
-					if privacy.user_name != ""
-						= privacy.user_name
-					br
 					b Bio :
 					if privacy.user_info[1] != ""
 						= privacy.user_info[1]
@@ -32,12 +28,14 @@ html
 					br
 					div(id="url")
 						if privacy.user_info[3] != ""
+							b Github Url :
 							a(href=privacy.user_info[3], target="_blank")
-								img(id="github_logo", src="/views/img/github_logo.PNG")
+								|  Visit! My Github!
 							br
+						b Website Url :
 						if privacy.user_info[4] != ""
 							a(href=privacy.user_info[4], target="_blank")
-								img(id="url_logo", src="/views/img/url_logo.PNG")
+								|  Visit! My website!!
 			br
 			div
 				b(id="repo", class="category") Repository
@@ -45,19 +43,11 @@ html
 			ul(class="repo_list")
 				each repo, index in privacy.repo_names
 					li
-						div(id="lang_repo")
-							| └[
-							= privacy.repo_info[index][8]
-							| ]┘
-						a(href=privacy.repo_info[index][1], target="_blank", title=privacy.repo_info[index][7])
+						a(href=privacy.repo_info[index][1], target="_blank")
 							= repo
-						b(class='At_time')
-							|  createdAt:
+						b(class='createAt')
+							|  createdAt
 							= privacy.repo_info[index][5]
-							|  |
-						b(class='At_time')
-							|  updatedAt:
-							= privacy.repo_info[index][6]
 						div
 							img(class="watch", src="/views/img/watch.png", width="60")
 							b(class="watch_count")= privacy.repo_info[index][2]
@@ -65,8 +55,6 @@ html
 							b(class="star_count")= privacy.repo_info[index][3]
 							img(class="fork", src="/views/img/fork.png", width="14")
 							b(class="fork_count")= privacy.repo_info[index][4]
-							img(class="code_line", src="/views/img/code_line.PNG", width="60")
-							b(class="code_line_count")= privacy.code_line[repo]
 			div
 				b(id="lang", class="category") Language
 				hr(width="88%", color="black")
@@ -79,33 +67,20 @@ html
 			script(src="/views/js/jquery.easypiechart.js")
 			script(src="/views/js/circle_setting.js")
 			div
-				hr(width="100%", color="black")
-			//-form(action="/page/" + name.split("'")[0], method="GET")
-				//-select(id="select_box", name="select")
-					//-option(value="Topic") Topic
-					//-option(value="Event") Event
-				//-input(id="select_box_submit", type="submit")
-			//-if sel == "Topic"
-			div
 				b(id="topic", class="category") Topic
-			div(id="topic_send_value", name=topics, block="none")
-			div(id="chartContainer" style="height: 280px; width: 700px;")
-			script(type="text/javascript", src="/views/js/pie_chart.js")
-			script(src="https://canvasjs.com/assets/script/canvasjs.min.js")
-			//-if sel == "Event"
-			div
 				b(id="event", class="category") Event
+				hr(width="88%", color="black")
+			div(id="topic_send_value", name=topics, block="none")
+			canvas(id="pie-chart", width="400", height="100")
+			script(type="text/javascript", src="/views/js/pie_chart.js")
 			div(id="event_send_value", name=events, block="none")
-			canvas(id="myRadarChart", width="600", height="300")
-			script(type="text/javascript", src="/views/js/radar_chart.js")
-
-				//-table(width="600", height="100")
-					//-tbody
-						//-tr
-							//-th Event Type
-							//-each eve_count, type in privacy.user_event
-								//-td= type
-						//-tr
-							//-th Event Count
-							//-each eve_count, type in privacy.user_event
-								//-td= eve_count
+			table(width="600", height="100")
+				tbody
+					tr
+						th Event Type
+						each eve_count, type in privacy.user_event
+							td= type
+					tr
+						th Event Count
+						each eve_count, type in privacy.user_event
+							td= eve_count

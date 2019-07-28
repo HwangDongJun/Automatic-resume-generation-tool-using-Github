@@ -31,7 +31,10 @@ main.use(express.static(path.join(__dirname, '/')));
 
 main.post('/page', (req, res) => {
 	var ps = require('python-shell');
+	var user_email = req.body.email;
+	var user_pwd = req.body.pwd;
 	var user_name = req.body.name;
+	var name = req.body.Uname;
 	var insert_sql = 'INSERT INTO user (username) VALUES ("' + user_name + '")';
 	var select_sql = 'SELECT count(*) FROM user WHERE username = "' + user_name + '"';
 	//중복 이름 발생시 확인한 다음 추가하지 않는다.
@@ -59,7 +62,7 @@ main.post('/page', (req, res) => {
 		pythonPath: '',
 		pythonOptions: ['-u'],
 		scriptPath: '',
-		args: ['enter031@naver.com:ghkdehdwns20', user_name]
+		args: [user_email + ':' + user_pwd, user_name, name] // 입력받은 github email and password를 넣는다.
 	};
 
 	ps.PythonShell.run('./python_file/main.py', options, function (err, results) {
@@ -71,10 +74,26 @@ main.post('/page', (req, res) => {
 main.get('/page/:name', (req, res) => {
 	var Uname = req.params.name;
 	fs.readFile('./python_file/user_profile/info_dict_'+Uname+'.json', {encoding:'utf8'}, (err, data) => {
-		var Ustr = Uname + ' Github Profile';
 		var Uprivacy = JSON.parse(data);
 		console.log(Uprivacy);
 
+		// if(req.query.select == "Topic") {
+		// 	var topic_count = Uprivacy.repos_topic;
+		// 	var topic_str = "";
+		// 	for ( var key in topic_count ) {
+		// 		topic_str += key + ',' + topic_count[key] + '/';
+		// 	}
+		// 	res.render('profile', {privacy:Uprivacy, sel:req.query.select, topics:topic_str, name: Uname + "'s Github Profile!"});
+		// } else if(req.query.select == "Event") {
+		// 	var event_count = Uprivacy.user_event;
+		// 	var event_str = "";
+		// 	for (var key in event_count) {
+		// 		event_str += key + ',' + event_count[key] + '/';
+		// 	}
+		// 	res.render('profile', {privacy:Uprivacy, sel:req.query.select, events:event_str, name: Uname + "'s Github Profile!"});
+		// } else {
+		// 	res.render('profile', {privacy:Uprivacy, sel:"", name: Uname + "'s Github Profile!"});
+		// }
 		var topic_count = Uprivacy.repos_topic;
 		var topic_str = "";
 		for ( var key in topic_count ) {
@@ -90,6 +109,30 @@ main.get('/page/:name', (req, res) => {
 	});
 });
 
-main.listen(3000, () => {
-	console.log('Connected, 3000 port!');
+// main.post('/page/:name', (req, res) => {
+// 	var selects = req.body.select;
+// 	var Uname = req.params.name;
+// 	fs.readFile('./python_file/user_profile/info_dict_'+Uname+'.json', {encoding:'utf8'}, (err, data) => {
+// 		var Uprivacy = JSON.parse(data);
+//
+// 		if(select == "Topic") {
+// 			var topic_count = Uprivacy.repos_topic;
+// 			var topic_str = "";
+// 			for ( var key in topic_count ) {
+// 				topic_str += key + ',' + topic_count[key] + '/';
+// 			}
+// 			res.render('profile', {privacy:Uprivacy, sel:selects, topics:topic_str, name: Uname + "'s Github Profile!"});
+// 		} else {
+// 			var event_count = Uprivacy.user_event;
+// 			var event_str = "";
+// 			for (var key in event_count) {
+// 				event_str += key + ',' + event_count[key] + '/';
+// 			}
+// 			res.render('profile', {privacy:Uprivacy, sel:selects, events:event_str, name: Uname + "'s Github Profile!"});
+// 		}
+// 	});
+// });
+
+main.listen(3306, () => {
+	console.log('Connected, 3306 port!');
 });

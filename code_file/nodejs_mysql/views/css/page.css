@@ -25,6 +25,12 @@ form {
 	top: 200px;
 }
 
+#github_email, #github_pwd {
+	position: relative;
+	bottom: 6px;
+	width: 190px;
+}
+
 #github_name {
 	width: 400px;
 	height: 32px;

@@ -35,7 +35,9 @@ class repo_diff_info(object):
 		repos_license = dict()
 		for data in response_json:
 			self.repoNames.append(data['name'])
-		return self.repoNames
+			if data['license'] != None:
+				repos_license[data['name']] = data['license']['name']
+		return self.repoNames, repos_license
 
 	def get_repo_lang(self, repo, lang_dict):
 		headers = self.headers
@@ -73,13 +75,13 @@ class repo_diff_info(object):
 				event_dict[e] += 1
 			else:
 				event_dict[e] = 1
-				
+
 	def get_branches(self, repo, branch_dict):
 		headers = self.headers
 		request_dict = {'id': self.name, 'repo': repo}
 		response_branch = urllib.request.Request(BRANCH_PATH.format_map(request_dict), headers = headers)
 		response_branch_json = self.load_data(response_branch)
-		
+
 		branch_list = list()
 		for branch in response_branch_json:
 			branch_list.append(branch['name'])
@@ -113,7 +115,7 @@ class repo_diff_info(object):
 		for comment in response_comment_json:
 			if self.name != comment['user']['login']: #자신이 올린 issue에 대한 comment는 제외한다.
 				comment_count += 1
-		
+
 		issue_comment[repo] = comment_count
 
 	def get_collaborators(self, repo, collaborate_list):

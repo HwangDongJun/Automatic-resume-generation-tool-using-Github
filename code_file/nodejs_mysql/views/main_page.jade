@@ -8,5 +8,8 @@ html
 		article
 			h1 Github Data Crawling and Analyzer
 			form(action='/page' method='post')
-				input(id="github_name", type="text", name='name', placeholder='Github UserName') 
+				input(id="github_email", type="email", name='email', placeholder='Github Email')
+				input(id="github_pwd", type="password", name='pwd', placeholder='Github Pwd')
+				input(id="github_name", type="text", name='name', placeholder='Github UserName')
+				input(id="name", type="text", name='Uname', placeholder='Your Name')
 				input(id="send", type='submit', value='send')
