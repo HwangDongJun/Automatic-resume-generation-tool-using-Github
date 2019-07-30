@@ -3,10 +3,10 @@ Github Data를 활용한 이력서 자동 제작 도구
 
 1. Getting Started (Window환경)
 	- [Node.js](https://nodejs.org/ko/)를 설치 후, Node.js command prompt 실행
-	'''
+	```
 	> cd Automatic resume generation tool using Github
 	> node main_page.js
-	'''
+	```
 	- [localhost](localhost:3306/page/main_page)에 접속하여 필요한 정보 입력
 
 2. Explanation
