@@ -113,7 +113,7 @@ class repo_diff_info(object):
 
 		comment_count = 0
 		for comment in response_comment_json:
-			if self.name != comment['user']['login']: #자신이 올린 issue에 대한 comment는 제외한다.
+			if self.name != comment['user']['login']: # 자신이 올린 issue에 대한 comment는 제외한다.
 				comment_count += 1
 
 		issue_comment[repo] = comment_count

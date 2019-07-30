@@ -65,7 +65,7 @@ main.post('/page', (req, res) => {
 		args: [user_email + ':' + user_pwd, user_name, name] // 입력받은 github email and password를 넣는다.
 	};
 
-	ps.PythonShell.run('./python_file/main.py', options, function (err, results) {
+	ps.PythonShell.run('./python_file/main.py', options, (err, results) => {
 		if(err) throw err;
 		res.redirect('/page/' + user_name);
 	});
@@ -74,26 +74,10 @@ main.post('/page', (req, res) => {
 main.get('/page/:name', (req, res) => {
 	var Uname = req.params.name;
 	fs.readFile('./python_file/user_profile/info_dict_'+Uname+'.json', {encoding:'utf8'}, (err, data) => {
+		console.log(data);
 		var Uprivacy = JSON.parse(data);
-		console.log(Uprivacy);
+		//console.log(Uprivacy);
 
-		// if(req.query.select == "Topic") {
-		// 	var topic_count = Uprivacy.repos_topic;
-		// 	var topic_str = "";
-		// 	for ( var key in topic_count ) {
-		// 		topic_str += key + ',' + topic_count[key] + '/';
-		// 	}
-		// 	res.render('profile', {privacy:Uprivacy, sel:req.query.select, topics:topic_str, name: Uname + "'s Github Profile!"});
-		// } else if(req.query.select == "Event") {
-		// 	var event_count = Uprivacy.user_event;
-		// 	var event_str = "";
-		// 	for (var key in event_count) {
-		// 		event_str += key + ',' + event_count[key] + '/';
-		// 	}
-		// 	res.render('profile', {privacy:Uprivacy, sel:req.query.select, events:event_str, name: Uname + "'s Github Profile!"});
-		// } else {
-		// 	res.render('profile', {privacy:Uprivacy, sel:"", name: Uname + "'s Github Profile!"});
-		// }
 		var topic_count = Uprivacy.repos_topic;
 		var topic_str = "";
 		for ( var key in topic_count ) {
@@ -108,30 +92,6 @@ main.get('/page/:name', (req, res) => {
 		res.render('profile', {privacy:Uprivacy, topics:topic_str, events:event_str, name: Uname + "'s Github Profile!"});
 	});
 });
-
-// main.post('/page/:name', (req, res) => {
-// 	var selects = req.body.select;
-// 	var Uname = req.params.name;
-// 	fs.readFile('./python_file/user_profile/info_dict_'+Uname+'.json', {encoding:'utf8'}, (err, data) => {
-// 		var Uprivacy = JSON.parse(data);
-//
-// 		if(select == "Topic") {
-// 			var topic_count = Uprivacy.repos_topic;
-// 			var topic_str = "";
-// 			for ( var key in topic_count ) {
-// 				topic_str += key + ',' + topic_count[key] + '/';
-// 			}
-// 			res.render('profile', {privacy:Uprivacy, sel:selects, topics:topic_str, name: Uname + "'s Github Profile!"});
-// 		} else {
-// 			var event_count = Uprivacy.user_event;
-// 			var event_str = "";
-// 			for (var key in event_count) {
-// 				event_str += key + ',' + event_count[key] + '/';
-// 			}
-// 			res.render('profile', {privacy:Uprivacy, sel:selects, events:event_str, name: Uname + "'s Github Profile!"});
-// 		}
-// 	});
-// });
 
 main.listen(3306, () => {
 	console.log('Connected, 3306 port!');

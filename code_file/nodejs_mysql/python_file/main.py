@@ -7,6 +7,7 @@ import math
 from get_certification import git_certification
 from github_info_crawler import get_info
 
+# repository의 언어별 사용량을 구한다. (대표언어 6가지)
 def avg_lang_percentage(repo_lang):
 	Allcount = 0
 	for i in repo_lang:
@@ -14,8 +15,8 @@ def avg_lang_percentage(repo_lang):
 
 	sort_repo_langs = dict()
 	for j in repo_lang:
-		percen = str(round(j[1]/Allcount*100))
-		sort_repo_langs[j[0]] = str(percen) + '%'
+		percen = str(round(j[1]/Allcount*100)) # ( 특정 언어 사용한 횟수 / 전체 언어 사용 횟수 ) * 100
+		sort_repo_langs[j[0]] = str(percen) + '%' # 시각화를 위해 string형태로 변환 후 %를 붙인다.
 	return sort_repo_langs
 
 def search_info(argv):
@@ -41,22 +42,20 @@ def search_info(argv):
 	total_data['user_info'] = Uinfo_data # user의 정보를 total_data에 담는다.
 	# total_data['user_info']은 [avatarUrl, bio, location, github_url, websiteUrl, company] 의 형태로 저장
 
-	# --------------------------------------------------------------------------------------------------------------------------------------
-	# 
-	# --------------------------------------------------------------------------------------------------------------------------------------
-	#user가 가지고 있는 repository들의 정보들을 가져온다.
+	# user가 가지고 있는 repository들의 다양한 정보들을 가져온다.
 	repo_names, total_repo_info, selected_repo_ranking, repo_langs, repo_topics, user_events, repo_branches, repo_check_issue, repo_issue_comment, code_lines = info_crawler.repo_info_crawling()
 
 	repo_info = list()
 	for sr in list(selected_repo_ranking.keys()): # 현재 점수는 넘기지 않고 있으며, 선택된 4개의 repository만 포함
-		for tri in total_repo_info:
+		for tri in total_repo_info: # total_repo_info => [ [repository_info], [repository_info], ... ]
 			if sr == tri[1].split('/')[4]:
-				repo_info.append(tri)
+				repo_info.append(tri) # 기준을 통해 선택된 4가지 repository의 정보
 	total_data['repo_info'] = repo_info # 선정된 4개의 repository를 Frontend로 넘겨주기 위해 total_data에 담는다.
 
 	new_repo_names = dict()
 	for j, name in enumerate(repo_info):
-		new_repo_names[j] = repo_names[name[0]]
+		new_repo_names[j] = repo_names[name[0]] # name[0] -> repo_count로 번호로 정해놓은 repository이다.
+		# new_repo_names는 선정된 4개의 repository의 이름이 들어간다.
 	total_data['repo_names'] = new_repo_names
 
 	repo_langs = sorted(repo_langs.items(), key=lambda x: x[1], reverse=True)
@@ -72,6 +71,7 @@ def search_info(argv):
 	total_data['repo_issue'] = repo_check_issue
 	total_data['repo_comment'] = repo_issue_comment
 	total_data['code_line'] = code_lines
+	
 	#print(total_data)
 
 	with open("C:/Users/HwangDongjun/Desktop/nodejs_mysql/python_file/user_profile/info_dict_"+user_name+".json", "w", encoding="utf-8") as make_file:

@@ -18,7 +18,7 @@ class get_info(object):
 		self.user_name = user_name
 		self.repoCommit_info = dict()
 
-	# def user_info_crawling(self, q):
+	# user의 기본 정보들을 수집하는 crawler
 	def user_info_crawling(self):
 		Uinfo_crawler = user_graphql_api_crawler(self.header, self.user_name)
 		Uinfo_data = Uinfo_crawler.run_query()
@@ -32,16 +32,20 @@ class get_info(object):
 
 		return [avatarUrl, bio, location, github_url, websiteUrl, company]
 
+	# 1. repository의 전체 code의 line_count를 구한다. 2. 검색하고자 하는 user가 직접 추가, 제거한 code의 line_count를 구한다.
 	def commits_crawler(self, commits_json, committed_data, repo, order, code_line):
 		commits_data = commits_json['data']['repository']['defaultBranchRef']['target']['history']['edges']
 		until_date = commits_data[len(commits_data)-1]['node']['committedDate'] #commits_data의 경우 정해진 개수가 표시되기에 date를 저장하여 지속적으로 탐색
 		addition_code = 0; deletion_code = 0
 		while len(commits_data) != 1:
+			# repository의 total_code_line_count를 구한다.
 			for data in commits_data:
 				addition_code += data['node']['additions']
 				deletion_code += data['node']['deletions']
+				# repository에서 검색하고자 하는 user의 code_line_count를 구한다.
 				if data['node']['author']['name'] == self.user_name:
 					committed_data[data['node']['committedDate'][:10]] = [data['node']['additions'], data['node']['deletions']]
+			# Github API인 v4에서 한 번에 검색하고자 하는 개수는 100개가 한정이기에 이후 데이터는 날짜를 이동해가면서 구한다.
 			next_commit_crawler = graphql_api_crawler_commit(repo, self.header, self.user_name, until_date)
 			commits_data = next_commit_crawler.run_query()
 		self.repoCommit_info[order] = committed_data
@@ -81,10 +85,6 @@ class get_info(object):
 		repo_info = repo_diff_info(self.header, self.user_name)
 		repo_names, repo_licenses = repo_info.get_repo_info()
 
-		userEvents = dict()
-		t3 = threading.Thread(target=repo_info.get_event, args=(userEvents,))
-		t3.start(); t3.join()
-
 		now_date = (datetime.now()).isoformat()[:19] + 'Z'
 
 		repo_names_dict = dict() # { 0 : repo1, 1: repo2, ... }
@@ -92,14 +92,13 @@ class get_info(object):
 		commit_ranking = dict() # repository별 total commit count
 		committed_data = dict() # { repo_committedDate : [additions, deletions] }
 		pr_repo_score = dict() # { repo_name : score }
-		# repository에 관한 정보
-		repo_code_line = dict()
-		repoLangs = dict()
-		repoTopics = dict()
-		repoBranches = dict()
-		repoIssue = dict()
-		repoComment = dict()
-		repoCollaborator = dict()
+		# repository에 관한 정보를 담는 dictionary
+		repo_code_line = dict(); repoLangs = dict(); repoTopics = dict(); userEvents = dict()
+		repoBranches = dict(); repoIssue = dict(); repoComment = dict(); repoCollaborator = dict()
+
+		# user의 Event를 구하는 과정에선 repository정보가 필요하지 않기 때문에 따로 구한다.
+		th1 = threading.Thread(target=repo_info.get_event, args=(userEvents,))
+		th1.start(); th1.join()
 
 		for repo_count, repo in enumerate(repo_names):
 			repo_crawler = graphql_api_crawler(repo, self.header, self.user_name)
@@ -120,19 +119,25 @@ class get_info(object):
 			collaborator_list = list()
 			repo_pullrequest = dict() # { 'OPEN/CLOSED/MERGED' : "repo/number..." }
 
-			#user가 가지고 있는 repository의 language들의 list를 가져온다.
-			t1 = threading.Thread(target=repo_info.get_repo_lang, args=(repo, repoLangs,))
-			t2 = threading.Thread(target=repo_info.get_repo_topic, args=(repo, repoTopics,))
-			t5 = threading.Thread(target=repo_info.get_branches, args=(repo, repoBranches,))
-			t6 = threading.Thread(target=repo_info.get_issues, args=(repo, open_close_issue_count,))
-			t7 = threading.Thread(target=self.commits_crawler, args=(commit_data, committed_data, repo, repo_count, repo_code_line,))
-			t8 = threading.Thread(target=repo_info.get_issues_comment, args=(repo, repoComment,))
-			t9 = threading.Thread(target=repo_info.get_collaborators, args=(repo, collaborator_list,))
-			t10 = threading.Thread(target=self.pullrequest_crawler, args=(repo_pullrequest, repo, self.user_name, self.header,))
+			# user가 가지고 있는 repository별 language 정보를 가져온다.
+			th2 = threading.Thread(target=repo_info.get_repo_lang, args=(repo, repoLangs,))
+			# user가 가지고 있는 repository별 Topic 정보를 가져온다.
+			th3 = threading.Thread(target=repo_info.get_repo_topic, args=(repo, repoTopics,))
+			# user가 가지고 있는 repository별 Branch 정보를 가져온다.
+			th4 = threading.Thread(target=repo_info.get_branches, args=(repo, repoBranches,))
+			# user가 가지고 있는 repository별 open / close 된 issue의 count를 가져온다.
+			th5 = threading.Thread(target=repo_info.get_issues, args=(repo, open_close_issue_count,))
+			# user가 가진 repository별 addition_code_line / deletion_code_line의 정보를 가져온다.
+			th6 = threading.Thread(target=self.commits_crawler, args=(commit_data, committed_data, repo, repo_count, repo_code_line,))
+			# user가 가진 repository별 issue_comment의 count를 가져온다.
+			th7 = threading.Thread(target=repo_info.get_issues_comment, args=(repo, repoComment,))
+			# user가 가진 repository별 협업자들의 이름을 list의 형태로 가져온다.
+			th8 = threading.Thread(target=repo_info.get_collaborators, args=(repo, collaborator_list,))
+			# user가 가진 repository별 pull_request의 정보를 가져온다.
+			th9 = threading.Thread(target=self.pullrequest_crawler, args=(repo_pullrequest, repo, self.user_name, self.header,))
 			#------------------------------------------------------------------
-			t1.start(); t2.start(); t5.start(); t6.start(); t7.start(); t8.start(); t9.start(); t10.start()
-
-			t1.join(); t2.join(); t5.join(); t6.join(); t7.join(); t8.join(); t9.join(); t10.join()
+			th2.start(); th3.start(); th4.start(); th5.start(); th6.start(); th7.start(); th8.start(); th9.start()
+			th2.join(); th3.join(); th4.join(); th5.join(); th6.join(); th7.join(); th8.join(); th9.join()
 
 			# ---------------------- Get -> Add about pr_number_repo_score -------------------------------
 			score_board = {'MERGED' : 8, 'OPEN' : 4, 'CLOSED' : 2}
@@ -147,6 +152,7 @@ class get_info(object):
 							pr_repo_score[repo] += score_board[state]
 					else:
 						for participant in pr_number_data['data']['repository']['pullRequest']['participants']['edges']:
+							# repository의 pullRequest 데이터에서 참가(활동)를 했었다면 5점의 점수가 부여된다.
 							if participant['node']['login'] == self.user_name:
 								if repo not in pr_repo_score:
 									pr_repo_score[repo] = 5
@@ -219,7 +225,7 @@ class get_info(object):
 				issue_score[ri] = (repoIssue[ri][0] + repoIssue[ri][1]) / (repoIssue[ri][2] + repoIssue[ri][3])
 				# issue 선정기준은 open + close의 개인 / 전체를 계산하였다. 필요하면 분리가능
 		#--------------------------------------------------------------
-		#repository 4개 선정 과정 [6]의 경우 self.repoComment 에서 분류가 되어 값이 들어감
+		#repository 4개 선정 과정 [6]의 경우 self.repoComment에서 분류가 되어 값이 들어감
 		#--------------------------------------------------------------
 		#repository 4개 선정 과정 [2]
 		for name in all_repo_score:
