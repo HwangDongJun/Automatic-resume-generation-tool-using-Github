@@ -60,5 +60,13 @@ Github Data를 활용한 이력서 자동 제작 도구
 5. Result
 	![User_Resume1](./img/user_resume.PNG)
 
-#### ※ 본 프로젝트는 아직 개발 중임을 밝힙니다. (2019-06-03~)
-##### 1차 수정 : 2019-07-27
+#### Citation
+If you publish work that uses Automatic resume generation tool using Github, please cite Automatic resume generation tool using Github as follows:
+- 한글 인용
+```
+황동준, 이형진, 문현수, 이영석.(2019).Github을 활용한 이력서 자동 제작 도구.한국정보과학회 학술발표논문집,(),1788-1790.
+```
+- 영어 인용
+```
+Hwang Dongjun, Hyungjin Lee, and Hyunsu Mun, Youngseok Lee.(2019).Automatic resume generation tool using Github.Proceedings of the Korean Information Science Society Conference,(),1788-1790.
+```
